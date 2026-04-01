@@ -1,0 +1,567 @@
+/* =============== CSS VARIABLES & RESET =============== */
+:root {
+    --bg-color: #ffffff;
+    --fg-color: #000000;
+    --font-main: 'Inter', sans-serif;
+    --glass-bg: rgba(255, 255, 255, 0.05);
+    --glass-border: rgba(0, 0, 0, 0.05);
+    --easing: cubic-bezier(0.19, 1, 0.22, 1);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    background-color: var(--bg-color);
+    color: var(--fg-color);
+    font-family: var(--font-main);
+    text-transform: lowercase;
+    overflow-x: hidden;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+::selection {
+    background: var(--fg-color);
+    color: var(--bg-color);
+}
+
+/* =============== EDITORIAL NOISE OVERLAY =============== */
+.noise-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 9999;
+    opacity: 0.03;
+    background: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+}
+
+/* =============== NAVIGATION =============== */
+.nav {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    padding: 2rem 4rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    z-index: 100;
+    mix-blend-mode: difference;
+    color: white;
+}
+
+.nav-logo {
+    font-size: 1.6rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+}
+
+.nav-links {
+    display: flex;
+    gap: 2rem;
+}
+
+.nav-links a {
+    color: inherit;
+    text-decoration: none;
+    font-size: 1.2rem;
+    font-weight: 500;
+    position: relative;
+    overflow: hidden;
+}
+
+.nav-links a::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 1px;
+    background: currentColor;
+    transform: translateX(-100%);
+    transition: transform 0.4s var(--easing);
+}
+
+.nav-links a:hover::after {
+    transform: translateX(0);
+}
+
+
+/* =============== SECTION 1: HERO =============== */
+.hero {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    padding: 2rem;
+}
+
+.hero-content {
+    text-align: right;
+    width: 100%;
+    max-width: 1200px;
+    z-index: 10;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.hero-title {
+    font-size: clamp(3rem, 6vw, 8rem);
+    max-width: 55vw;
+    font-weight: 700;
+    line-height: 0.9;
+    letter-spacing: -0.04em;
+    margin-bottom: 1rem;
+    margin-right: -6%;
+    margin-top: 25vh;
+    white-space: nowrap;
+    /* Guarantees EXACTLY two lines via the <br> */
+}
+
+.hero-subtitle {
+    font-size: clamp(1rem, 2vw, 1.5rem);
+    font-weight: 400;
+    letter-spacing: -0.01em;
+    position: absolute;
+    left: 4%;
+    top: 40%;
+    transform: translateY(-50%);
+    z-index: 20;
+}
+
+.hero-image {
+    position: absolute;
+    top: 55%;
+    left: 26%;
+    transform: translate(-50%, -50%);
+    height: 70vh;
+    max-height: 800px;
+    z-index: 5;
+    animation: floatImage 5s ease-in-out infinite;
+    mix-blend-mode: multiply;
+    /* Helps blend whitespace if image has any */
+}
+
+@keyframes floatImage {
+    0% {
+        transform: translate(-50%, -50%);
+    }
+
+    50% {
+        transform: translate(-50%, -53%);
+    }
+
+    100% {
+        transform: translate(-50%, -50%);
+    }
+}
+
+.floating-element {
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.3rem;
+    font-size: 0.85rem;
+    font-weight: 500;
+    opacity: 0;
+    /* for gsap animation */
+}
+
+@keyframes floatSwinging {
+
+    0%,
+    100% {
+        transform: translate(0, 0) rotate(0deg);
+    }
+
+    33% {
+        transform: translate(4px, -6px) rotate(2deg);
+    }
+
+    66% {
+        transform: translate(-4px, 6px) rotate(-2deg);
+    }
+}
+
+.floating-element>* {
+    display: block;
+    animation: floatSwinging 6s ease-in-out infinite;
+}
+
+.floating-element:nth-of-type(even)>* {
+    animation-duration: 8s;
+    animation-delay: -3s;
+}
+
+.floating-element:nth-of-type(3n)>* {
+    animation-duration: 7s;
+    animation-delay: -1s;
+    animation-direction: reverse;
+}
+
+.floating-element .star {
+    font-size: 0.6rem;
+}
+
+
+/* =============== SECTION 2: PORTFOLIO =============== */
+.portfolio {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    background: var(--bg-color);
+    overflow: hidden;
+    position: relative;
+}
+
+.slider-container {
+    display: flex;
+    width: max-content;
+}
+
+.slider-track {
+    display: flex;
+    animation: scrollSlider 40s linear infinite;
+    /* Faster speed */
+    gap: 2vw;
+    padding-right: 2vw;
+    will-change: transform;
+    /* Hardware acceleration hint */
+}
+
+.slider-container:hover .slider-track,
+.slider-container.is-playing .slider-track {
+    animation-play-state: paused;
+}
+
+@keyframes scrollSlider {
+    0% {
+        transform: translate3d(0, 0, 0);
+    }
+
+    100% {
+        transform: translate3d(-100%, 0, 0);
+    }
+}
+
+.card {
+    position: relative;
+    width: 45vw;
+    /* Extremely large, editorial feel */
+    aspect-ratio: 16 / 9;
+    flex-shrink: 0;
+    overflow: hidden;
+    background: #000;
+    transition: transform 0.5s var(--easing);
+    will-change: transform;
+    /* Ensure scaling is perfectly smooth */
+}
+
+.card:hover,
+.card.is-active {
+    transform: scale(1.03);
+}
+
+.iframe-wrapper {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+.iframe-wrapper iframe {
+    width: 100%;
+    height: 100%;
+    border: none;
+    pointer-events: none;
+}
+
+.card.is-active .iframe-wrapper iframe {
+    pointer-events: auto;
+}
+
+.custom-play-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: opacity 0.4s var(--easing), background 0.4s var(--easing);
+    z-index: 10;
+}
+
+.custom-play-overlay:hover {
+    background: rgba(0, 0, 0, 0.3);
+}
+
+.custom-play-overlay svg {
+    width: 80px;
+    height: 80px;
+    fill: white;
+    opacity: 0.8;
+    transition: transform 0.3s var(--easing), opacity 0.3s var(--easing);
+}
+
+.custom-play-overlay:hover svg {
+    transform: scale(1.1);
+    opacity: 1;
+}
+
+.card.is-active .custom-play-overlay {
+    opacity: 0;
+    pointer-events: none;
+}
+
+
+/* =============== SECTION 3: CONTACT =============== */
+.contact {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+
+.contact-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 3rem;
+}
+
+.contact-title {
+    font-size: clamp(4rem, 10vw, 12rem);
+    font-weight: 700;
+    letter-spacing: -0.05em;
+    line-height: 1;
+}
+
+.contact-email {
+    font-size: 1.5rem;
+    font-weight: 500;
+    text-decoration: none;
+    color: var(--fg-color);
+    position: relative;
+}
+
+.contact-email::after {
+    content: '';
+    position: absolute;
+    bottom: -4px;
+    left: 0;
+    width: 100%;
+    height: 1px;
+    background: var(--fg-color);
+    transform: scaleX(0);
+    transform-origin: right;
+    transition: transform 0.6s var(--easing);
+}
+
+.contact-email:hover::after {
+    transform: scaleX(1);
+    transform-origin: left;
+}
+
+.social-links {
+    display: flex;
+    gap: 2rem;
+    margin-top: 2rem;
+}
+
+.social-links a {
+    text-decoration: none;
+    color: var(--fg-color);
+    font-size: 1.6rem;
+    font-weight: 500;
+    opacity: 0.6;
+    transition: opacity 0.3s ease;
+    position: relative;
+}
+
+.social-links a::after {
+    content: '';
+    position: absolute;
+    bottom: -4px;
+    left: 0;
+    width: 100%;
+    height: 1px;
+    background: var(--fg-color);
+    transform: scaleX(0);
+    transform-origin: right;
+    transition: transform 0.6s var(--easing);
+}
+
+.social-links a:hover {
+    opacity: 1;
+}
+
+.social-links a:hover::after {
+    transform: scaleX(1);
+    transform-origin: left;
+}
+
+.footer {
+    position: absolute;
+    bottom: 2rem;
+    font-size: 0.75rem;
+    opacity: 0.4;
+}
+
+/* =============== RESPONSIVENESS =============== */
+@keyframes floatImageMobile {
+    0% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-3%);
+    }
+
+    100% {
+        transform: translateY(0);
+    }
+}
+
+@media (max-width: 768px) {
+    .nav {
+        padding: 1.5rem 1.5rem;
+    }
+
+    .hero-content {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+        margin-top: 0;
+        padding-top: 10vh;
+    }
+
+    .hero-subtitle {
+        order: 1;
+        position: static;
+        transform: none;
+        margin-top: 0;
+        margin-bottom: 2rem;
+        text-align: center;
+    }
+
+    .hero-image {
+        order: 2;
+        position: relative;
+        left: 0;
+        top: 0;
+        transform: none;
+        height: 40vh;
+        max-height: 450px;
+        margin: 5vh auto;
+        /* Forces strict vertical padding centering */
+        display: block;
+        animation: floatImageMobile 5s ease-in-out infinite;
+    }
+
+    .hero-title {
+        order: 3;
+        font-size: 11vw;
+        max-width: 100%;
+        margin-right: 0;
+        margin-top: 2rem;
+        z-index: 10;
+        white-space: nowrap;
+        text-align: left;
+    }
+
+    .floating-element {
+        display: flex;
+        font-size: 0.75rem;
+        z-index: 15;
+    }
+
+    /* Target the 5 absolute floating element divs and place them circularly outside the image bounds */
+    .floating-element:nth-child(2) {
+        top: 35% !important;
+        left: 2% !important;
+        right: auto !important;
+    }
+
+    .floating-element:nth-child(3) {
+        top: 35% !important;
+        right: 2% !important;
+        left: auto !important;
+    }
+
+    .floating-element:nth-child(4) {
+        top: 60% !important;
+        right: 2% !important;
+        left: auto !important;
+    }
+
+    .floating-element:nth-child(5) {
+        top: 60% !important;
+        left: 2% !important;
+        right: auto !important;
+    }
+
+    .floating-element:nth-child(6) {
+        top: 70% !important;
+        left: 50% !important;
+        transform: translateX(-50%) !important;
+        right: auto !important;
+    }
+
+    .card {
+        width: 85vw;
+    }
+
+    .slider-track {
+        gap: 4vw;
+        padding-right: 4vw;
+    }
+
+    .contact-title {
+        font-size: 15vw;
+        text-align: center;
+        white-space: nowrap;
+    }
+
+    .contact-email {
+        font-size: 1.2rem;
+        display: block;
+        text-align: center;
+        width: 100%;
+    }
+
+    .social-links {
+        gap: 1.5rem;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .social-links a {
+        font-size: 1.2rem;
+        text-align: center;
+    }
+}
